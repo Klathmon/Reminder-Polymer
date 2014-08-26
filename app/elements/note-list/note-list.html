@@ -1,0 +1,30 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../../bower_components/core-animated-pages/transitions/list-cascade.html">
+
+<link rel="import" href="../note-element/note-element.html">
+
+<polymer-element name="note-list" attributes="notelisturl">
+  <template>
+    <link rel="stylesheet" href="note-list.css">
+    <core-ajax
+      auto
+      url="{{notelisturl}}"
+      method="GET"
+      handleAs="json"
+      on-core-response="{{showNotes}}"></core-ajax>
+
+    <core-animated-pages selected="0" transitions="list-cascade" on-core-animated-pages-transition-prepare="{{notesAreVisible}}">
+      <section></section>
+      <section>
+        <div id="notes" list-cascade horizontal layout wrap>
+          <template id="notetemp" repeat="{{notes}}">
+            <note-element text="{{text}}" dueDate="{{dueDate}}" done="{{done}}"></note-element>
+          </template>
+        </div>
+      </section>
+    </core-animated-pages>
+
+  </template>
+  <script src="note-list.js"></script>
+</polymer-element>

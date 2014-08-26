@@ -1,0 +1,23 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../../bower_components/paper-shadow/paper-shadow.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+
+
+<script src="../../bower_components/moment/moment.js"></script>
+
+<polymer-element name="note-element" attributes="text done dueDate isVisible" vertical end-justified layout>
+  <template>
+    <link rel="stylesheet" href="note.css">
+    <paper-shadow z="3" hasPosition></paper-shadow>
+
+    <div id="text" flex>{{text}}</div>
+
+    <div id="footer" horizontal justified layout>
+      <paper-checkbox label="Finished" checked="{{done}}"></paper-checkbox>
+      <div id="dueDate" title="{{dueDateParsed}}">Due {{dueFromNow}}</div>
+    </div>
+
+  </template>
+  <script src="note.js"></script>
+</polymer-element>

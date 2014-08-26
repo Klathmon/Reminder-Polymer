@@ -1,0 +1,21 @@
+:host {
+  font-family: 'Roboto' sans-serif;
+  display: block;
+  background-color: white;
+  border: 1px solid #CFCFCF;
+  width: 300px;
+  line-height: 1;
+
+  > div {
+    padding: 12px;
+  }
+}
+
+#text {
+  overflow: auto;
+  max-height: 200px;
+}
+
+#footer {
+  background-color: rgb(146, 228, 201);
+}

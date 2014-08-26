@@ -1,0 +1,7 @@
+note-element {
+  margin: 5px;
+
+  /deep/ * {
+    transform: translate3d(0,0,0);
+  }
+}
