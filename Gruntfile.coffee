@@ -1,15 +1,11 @@
-"use strict"
-LIVERELOAD_PORT = 35729
-lrSnippet = require("connect-livereload")(port: LIVERELOAD_PORT)
+
+DIST_DIR = "dist"
+DEV_DIR  = "dev"
+APP_DIR  = "app"
+
 mountFolder = (connect, dir) ->
   connect.static require("path").resolve(dir)
 
-
-# # Globbing
-# for performance reasons we're only matching one level down:
-# 'test/spec/{,*/}*.js'
-# use this if you want to match all subfolders:
-# 'test/spec/**/*.js'
 module.exports = (grunt) ->
 
   # show elapsed time at the end
@@ -19,6 +15,145 @@ module.exports = (grunt) ->
   require("load-grunt-tasks") grunt
 
   grunt.initConfig
+
+    # SASS compilation
+    sass:
+      options:
+        loadPath: "bower_components"
+        style: "compressed"
+
+      dev:
+        options:
+          sourcemap: "file"
+        files: [
+          expand: true
+          cwd: APP_DIR
+          src: [
+            "styles/**/*.{scss,sass}"
+            "elements/**/*.{scss,sass}"
+          ]
+          dest: DEV_DIR
+          ext: ".css"
+        ]
+
+      dist:
+        options:
+          sourcemap: "none"
+        files: [
+          expand: true
+          cwd: APP_DIR
+          src: [
+            "styles/**/*.{scss,sass}"
+            "elements/**/*.{scss,sass}"
+          ]
+          dest: DIST_DIR
+          ext: ".css"
+        ]
+
+    # Coffeescript compilation
+    coffee:
+      options:
+        bare: true
+
+      dev:
+        options:
+          sourceMap: true
+        files: [
+          expand: true
+          cwd: APP_DIR
+          src: [
+            "scripts/**/*.coffee"
+            "elements/**/*.coffee"
+          ]
+          dest: DEV_DIR
+          ext: ".js"
+        ]
+
+      dist:
+        files: [
+          expand: true
+          cwd: APP_DIR
+          src: [
+            "scripts/**/*.coffee"
+            "elements/**/*.coffee"
+          ]
+          dest: DIST_DIR
+          ext: ".js"
+        ]
+
+    # AutoPrefix CSS
+    autoprefixer:
+      options:
+        browsers: ["last 2 versions"]
+
+      dev:
+        options:
+          cascade: true
+          map: true
+        files: [
+          expand: true
+          cwd: DEV_DIR
+          src: "**/*.css"
+          dest: DEV_DIR
+        ]
+
+      dist:
+        options:
+          cascade: false
+        files: [
+          expand: true
+          cwd: DIST_DIR
+          src: [
+            "**/*.css"
+            "!bower_components/**/*.css"
+          ]
+          dest: DIST_DIR
+        ]
+
+    # Compress javascript with uglify
+    uglify:
+      dev:
+        options:
+          sourceMap: true
+          sourceMapIn: (source) ->
+            newFile = source + ".map"
+            console.log newFile
+            return newFile
+
+        files: [
+          expand: true
+          cwd: DEV_DIR
+          src: "**/*.js"
+          dest: DEV_DIR
+        ]
+
+
+    # Clean temp file
+    clean:
+      dev: DEV_DIR + "**"
+      dist: [
+        DEV_DIR + "**"
+        DIST_DIR + "**"
+        ".sass-cache"
+      ]
+
+    # Connect web server for development
+    connect:
+      options:
+        port: 9000
+        hostname: "0.0.0.0"
+
+      dev:
+        options:
+          middleware: (connect) ->
+            [
+              require("connect-livereload")()
+              mountFolder(connect, DEV_DIR)
+              mountFolder(connect, APP_DIR)
+              mountFolder(connect, "")
+            ]
+
+    # Watch and livereload files
     watch:
       options:
         nospawn: true
@@ -30,308 +165,42 @@ module.exports = (grunt) ->
           livereload: true
 
         files: [
-          "app/*.html"
-          "app/elements/{,*/}*.html"
-          "{.tmp,app}/elements/{,*/}*.css"
-          "{.tmp,app}/styles/{,*/}*.css"
-          "{.tmp,app}/scripts/{,*/}*.js"
-          "app/images/{,*/}*.{png,jpg,jpeg,gif,webp}"
-        ]
-
-      js:
-        files: ["app/scripts/{,*/}*.js"]
-        tasks: ["jshint"]
-
-      styles:
-        files: [
-          "app/styles/{,*/}*.css"
-          "app/elements/{,*/}*.css"
-        ]
-        tasks: [
-          "copy:styles"
-          "autoprefixer:server"
+          "Gruntfile.coffee"
+          APP_DIR + "/*.html"
+          APP_DIR + "/elements/{,*/}*.html"
+          "{" + DEV_DIR + "," + APP_DIR + "}/elements/{,*/}*.{css,sass,scss,js,coffee}"
+          "{" + DEV_DIR + "," + APP_DIR + "}/styles/{,*/}*.{css,sass,scss}"
+          "{" + DEV_DIR + "," + APP_DIR + "}/scripts/{,*/}*.{js,coffee}"
+          APP_DIR + "/images/{,*/}*.{png,jpg,jpeg,gif,webp}"
         ]
 
       sass:
         files: [
-          "app/styles/{,*/}*.{scss,sass}"
-          "app/elements/{,*/}*.{scss,sass}"
+          APP_DIR + "/elements/**/*.{sass,scss}"
+          APP_DIR + "/styles/**/*.{sass,scss}"
         ]
         tasks: [
-          "sass:server"
-          "autoprefixer:server"
+          "sass:dev"
+          "autoprefixer:dev"
         ]
 
-      coffee:
+      compass:
         files: [
-          "app/scripts/{,*/}*.coffee"
-          "app/elements/{,*/}*.coffee"
+          APP_DIR + "/elements/**/*.compass"
+          APP_DIR + "/styles/**/*.compass"
         ]
-        tasks: ["coffee:server"]
-
-
-    # Compiles Sass to CSS and generates necessary files if requested
-    sass:
-      options:
-        sourcemap: "none"
-        loadPath: "bower_components"
-
-      dist:
-        options:
-          style: "compressed"
-
-        files: [
-          expand: true
-          cwd: "app"
-          src: [
-            "styles/{,*/}*.{scss,sass}"
-            "elements/{,*/}*.{scss,sass}"
-          ]
-          dest: "dist"
-          ext: ".css"
+        tasks: [
+          "compass:dev"
         ]
 
-      server:
-        files: [
-          expand: true
-          cwd: "app"
-          src: [
-            "styles/{,*/}*.{scss,sass}"
-            "elements/{,*/}*.{scss,sass}"
-          ]
-          dest: ".tmp"
-          ext: ".css"
-        ]
-
-
-    # Compiles Coffeescript to Javascript and generates necessary files if requested
-    coffee:
-      options:
-        sourceMap: false
-        bare: true
-
-      dist:
-        files: [
-          expand: true
-          cwd: "app"
-          src: [
-            "scripts/{,*/}*.coffee"
-            "elements/{,*/}*.coffee"
-          ]
-          dest: "dist"
-          ext: ".js"
-        ]
-
-      server:
-        files: [
-          expand: true
-          cwd: "app"
-          src: [
-            "scripts/{,*/}*.coffee"
-            "elements/{,*/}*.coffee"
-          ]
-          dest: ".tmp"
-          ext: ".js"
-        ]
-
-    autoprefixer:
-      options:
-        browsers: ["last 2 versions"]
-
-      server:
-        files: [
-          expand: true
-          cwd: ".tmp"
-          src: "**/*.css"
-          dest: ".tmp"
-        ]
-
-      dist:
-        files: [
-          expand: true
-          cwd: "dist"
-          src: [
-            "**/*.css"
-            "!bower_components/**/*.css"
-          ]
-          dest: "dist"
-        ]
-
-    connect:
-      options:
-        port: 9000
-
-        # change this to '0.0.0.0' to access the server from outside
-        hostname: "0.0.0.0"
-
-      livereload:
-        options:
-          middleware: (connect) ->
-            [
-              lrSnippet
-              mountFolder(connect, ".tmp")
-              mountFolder(connect, "app")
-            ]
-
-      test:
-        options:
-          middleware: (connect) ->
-            [
-              mountFolder(connect, ".tmp")
-              mountFolder(connect, "test")
-              mountFolder(connect, "app")
-            ]
-
-      dist:
-        options:
-          middleware: (connect) ->
-            [mountFolder(connect, "app")]
-
-    open:
-      server:
-        path: "http://localhost:<%= connect.options.port %>"
-
-    clean:
-      dist: [
-        ".tmp"
-        "dist/*"
-        ".sass-cache"
-      ]
-      server: ".tmp"
-
-    jshint:
-      options:
-        jshintrc: ".jshintrc"
-        reporter: require("jshint-stylish")
-
-      all: [
-        "app/scripts/{,*/}*.js"
-        "!app/scripts/vendor/*"
-        "test/spec/{,*/}*.js"
-      ]
-
-    mocha:
-      all:
-        options:
-          run: true
-          urls: ["http://localhost:<%= connect.options.port %>/index.html"]
-
-    useminPrepare:
-      html: "app/index.html"
-      options:
-        dest: "dist"
-
-    usemin:
-      html: ["dist/{,*/}*.html"]
-      css: ["dist/styles/{,*/}*.css"]
-      options:
-        dirs: ["dist"]
-        blockReplacements:
-          vulcanized: (block) ->
-            "<link rel=\"import\" href=\"" + block.dest + "\">"
-
-    vulcanize:
-      default:
-        options:
-          strip: true
-
-        files:
-          "dist/elements/elements.vulcanized.html": ["dist/elements/**/*.html"]
-
-    imagemin:
-      dist:
-        files: [
-          expand: true
-          cwd: "app/images"
-          src: "{,*/}*.{png,jpg,jpeg}"
-          dest: "dist/images"
-        ]
-
-    minifyHtml:
-      options:
-        quotes: true
-        empty: true
-
-      app:
-        files: [
-          expand: true
-          cwd: "dist"
-          src: "*.html"
-          dest: "dist"
-        ]
-
-    copy:
-      dist:
-        files: [
-          expand: true
-          dot: true
-          cwd: "app"
-          dest: "dist"
-          src: [
-            "*.{ico,txt}"
-            ".htaccess"
-            "*.html"
-            "elements/**"
-            "images/{,*/}*.{webp,gif}"
-            "bower_components/**"
-          ]
-        ]
-
-      styles:
-        files: [
-          expand: true
-          cwd: "app"
-          dest: ".tmp"
-          src: ["{styles,elements}/{,*/}*.css"]
-        ]
-
-  grunt.registerTask "server", (target) ->
-    grunt.log.warn "The `server` task has been deprecated. Use `grunt serve` to start a server."
-    grunt.task.run ["serve:" + target]
-    return
 
   grunt.registerTask "serve", (target) ->
-    if target is "dist"
-      return grunt.task.run([
-        "build"
-        "open"
-        "connect:dist:keepalive"
-      ])
     grunt.task.run [
-      "clean:server"
-      "sass:server"
-      "coffee:server"
-      "copy:styles"
-      "autoprefixer:server"
-      "connect:livereload"
-      "open"
+      "clean:dev"
+      "sass:dev"
+      "autoprefixer:dev"
+      "coffee:dev"
+      "uglify:dev"
+      "connect:dev"
       "watch"
     ]
-    return
-
-  grunt.registerTask "test", [
-    "clean:server"
-    "connect:test"
-    "mocha"
-  ]
-  grunt.registerTask "build", [
-    "clean:dist"
-    "sass"
-    "coffee"
-    "copy"
-    "useminPrepare"
-    "imagemin"
-    "concat"
-    "autoprefixer"
-    "uglify"
-    "vulcanize"
-    "usemin"
-    "minifyHtml"
-  ]
-  grunt.registerTask "default", [
-    "jshint"
-
-    # 'test'
-    "build"
-  ]
-  return
