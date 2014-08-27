@@ -117,7 +117,6 @@ module.exports = (grunt) ->
           sourceMap: true
           sourceMapIn: (source) ->
             newFile = source + ".map"
-            console.log newFile
             return newFile
 
         files: [
