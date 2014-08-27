@@ -1,5 +1,7 @@
+@import 'placeholders';
+
 body {
+  @extend %roboto-font;
   background: #fafafa;
-  font-family: 'Roboto' sans-serif;
   color: #333;
 }
