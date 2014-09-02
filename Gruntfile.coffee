@@ -195,6 +195,13 @@ module.exports = (grunt) ->
           "compass:dev"
         ]
 
+    # Run the server
+    run:
+      reminder_server:
+        options:
+          wait: false
+        cmd: 'Reminder.exe'
+
 
   grunt.registerTask "serve", (target) ->
     grunt.task.run [
@@ -203,6 +210,7 @@ module.exports = (grunt) ->
       "autoprefixer:dev"
       "coffee:dev"
       "uglify:dev"
+      "run:reminder_server"
       "connect:dev"
       "watch"
     ]

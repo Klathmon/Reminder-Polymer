@@ -14,7 +14,8 @@
     "grunt-contrib-uglify": "~0.5.1",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-connect": "~0.8.0",
-    "grunt-contrib-watch": "~0.6.1"
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-run": "~0.2.4"
   },
   "engines": {
     "node": ">=0.10.0"

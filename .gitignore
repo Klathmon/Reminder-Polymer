@@ -3,3 +3,5 @@ dev
 dist
 .sass-cache
 app/bower_components
+Reminder.exe
+reminder.db
