@@ -195,7 +195,7 @@ module.exports = (grunt) ->
           "compass:dev"
         ]
 
-    # Run the server
+    # Run the back-end server
     run:
       reminder_server:
         options:
