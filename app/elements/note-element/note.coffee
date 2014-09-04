@@ -15,5 +15,4 @@ autoSizeText = (textDiv) ->
   while textDiv.scrollWidth > textDiv.clientWidth || textDiv.scrollHeight > textDiv.clientHeight
     fontSize -= .5
     textDiv.style.fontSize = fontSize + "em"
-    # console.log textDiv.scrollHeight + " " + textDiv.clientHeight
     break if fontSize <= 1
