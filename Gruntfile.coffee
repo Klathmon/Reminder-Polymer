@@ -168,6 +168,7 @@ module.exports = (grunt) ->
         files: [
           "Gruntfile.coffee"
           APP_DIR + "/*.html"
+          APP_DIR + "/tests/*.html"
           APP_DIR + "/elements/**/*.html"
           "{" + DEV_DIR + "," + APP_DIR + "}/elements/**/*.{css,sass,scss,js,coffee}"
           "{" + DEV_DIR + "," + APP_DIR + "}/styles/**/*.{css,sass,scss}"
