@@ -250,7 +250,7 @@ module.exports = (grunt) ->
       "connect:dev"
     ]
 
-  grunt.registerTask "serve", (target) ->
+  grunt.registerTask "serveLaunchApp", (target) ->
     grunt.task.run [
       "buildDev"
       "open:serveChrome"
@@ -259,12 +259,18 @@ module.exports = (grunt) ->
       "watch"
     ]
 
-  grunt.registerTask "serveTest", (target) ->
+  grunt.registerTask "serveLaunchTest", (target) ->
     grunt.task.run [
       "buildDev"
       "open:testChrome"
       "open:testFirefox"
       "open:testIE"
+      "watch"
+    ]
+
+  grunt.registerTask "serve", (target) ->
+    grunt.task.run [
+      "buildDev"
       "watch"
     ]
 
