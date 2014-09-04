@@ -1,7 +1,9 @@
+@import 'colors';
+@import 'mixins';
 @import 'placeholders';
 
 body {
-  @extend %roboto-font;
+  @include roboto-font;
   background: #fafafa;
   color: #333;
 }

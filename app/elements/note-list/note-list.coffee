@@ -5,8 +5,7 @@ Polymer 'note-list',
       this.shadowRoot.querySelector("#notetemp").model = {notes: event.detail.response}
       this.shadowRoot.querySelector("core-animated-pages").selected = 1
   notesAreVisible: (oldValue, newValue) ->
-    noteElements = this.shadowRoot.querySelectorAll("note-element")
-    setNoteVisible element for element in noteElements
+    [].forEach.call(this.shadowRoot.querySelectorAll("note-element"), setNoteVisible)
 
 setNoteVisible = (element) ->
   element.isVisible = true

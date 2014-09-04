@@ -186,13 +186,14 @@ module.exports = (grunt) ->
           "autoprefixer:dev"
         ]
 
-      compass:
+      coffee:
         files: [
-          APP_DIR + "/elements/**/*.compass"
-          APP_DIR + "/styles/**/*.compass"
+          APP_DIR + "/elements/**/*.coffee"
+          APP_DIR + "/styles/**/*.coffee"
         ]
         tasks: [
-          "compass:dev"
+          "coffee:dev"
+          "uglify:dev"
         ]
 
     # Run the back-end server

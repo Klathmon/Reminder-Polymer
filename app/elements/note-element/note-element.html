@@ -5,12 +5,12 @@
 
 <script src="../../bower_components/moment/moment.js"></script>
 
-<polymer-element name="note-element" attributes="text done dueDate isVisible" vertical end-justified layout>
+<polymer-element name="note-element" attributes="text done dueDate isVisible" vertical justified layout>
   <template>
     <link rel="stylesheet" href="note.css">
-    <paper-shadow z="3" hasPosition></paper-shadow>
+    <paper-shadow z="3"></paper-shadow>
 
-    <div id="text" flex>{{text}}</div>
+    <div id="text">{{text}}</div>
 
     <div id="footer" horizontal justified layout>
       <paper-checkbox label="Finished" checked="{{done}}"></paper-checkbox>

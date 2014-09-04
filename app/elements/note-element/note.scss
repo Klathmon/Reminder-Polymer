@@ -1,8 +1,10 @@
 @import 'colors';
+@import 'mixins';
 @import 'placeholders';
 
 :host {
-  @extend %roboto-font;
+  @include reset-font;
+  @include roboto-font;
   display: block;
   background-color: white;
   border: 1px solid #CFCFCF;
