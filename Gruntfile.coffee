@@ -129,7 +129,6 @@ module.exports = (grunt) ->
           dest: DEV_DIR
         ]
 
-
     # Clean temp file
     clean:
       dev: DEV_DIR + "**"
@@ -169,11 +168,11 @@ module.exports = (grunt) ->
         files: [
           "Gruntfile.coffee"
           APP_DIR + "/*.html"
-          APP_DIR + "/elements/{,*/}*.html"
-          "{" + DEV_DIR + "," + APP_DIR + "}/elements/{,*/}*.{css,sass,scss,js,coffee}"
-          "{" + DEV_DIR + "," + APP_DIR + "}/styles/{,*/}*.{css,sass,scss}"
-          "{" + DEV_DIR + "," + APP_DIR + "}/scripts/{,*/}*.{js,coffee}"
-          APP_DIR + "/images/{,*/}*.{png,jpg,jpeg,gif,webp}"
+          APP_DIR + "/elements/**/*.html"
+          "{" + DEV_DIR + "," + APP_DIR + "}/elements/**/*.{css,sass,scss,js,coffee}"
+          "{" + DEV_DIR + "," + APP_DIR + "}/styles/**/*.{css,sass,scss}"
+          "{" + DEV_DIR + "," + APP_DIR + "}/scripts/**/*.{js,coffee}"
+          APP_DIR + "/images/**/*.{png,jpg,jpeg,gif,webp}"
         ]
 
       sass:
@@ -203,8 +202,43 @@ module.exports = (grunt) ->
           wait: false
         cmd: 'Reminder.exe'
 
+    # Open the necessary browsers to the right pages
+    open:
+      serveChrome:
+        path: "http://localhost:<%= connect.options.port %>"
+        app: 'Chrome'
+      serveFirefox:
+        path: "http://localhost:<%= connect.options.port %>"
+        app: 'Firefox'
+      serveIE:
+        path: "http://localhost:<%= connect.options.port %>"
+        app: 'IExplore'
 
-  grunt.registerTask "serve", (target) ->
+      testChrome:
+        path: "http://localhost:<%= connect.options.port %>/tests/runner.html"
+        app: 'Chrome'
+      testFirefox:
+        path: "http://localhost:<%= connect.options.port %>/tests/runner.html"
+        app: 'Firefox'
+      testIE:
+        path: "http://localhost:<%= connect.options.port %>/tests/runner.html"
+        app: 'IExplore'
+
+    # Mocha-slimerjs test runner
+    mocha_slimer:
+      options:
+        run: true
+        urls: [
+          "http://localhost:<%= connect.options.port %>/tests/runner.html"
+        ]
+      normal:
+        run: true
+
+      travis:
+        options:
+          xvfb: true
+
+  grunt.registerTask "buildDev", (target) ->
     grunt.task.run [
       "clean:dev"
       "sass:dev"
@@ -213,5 +247,34 @@ module.exports = (grunt) ->
       "uglify:dev"
       "run:reminder_server"
       "connect:dev"
+    ]
+
+  grunt.registerTask "serve", (target) ->
+    grunt.task.run [
+      "buildDev"
+      "open:serveChrome"
+      "open:serveFirefox"
+      "open:serveIE"
       "watch"
+    ]
+
+  grunt.registerTask "serveTest", (target) ->
+    grunt.task.run [
+      "buildDev"
+      "open:testChrome"
+      "open:testFirefox"
+      "open:testIE"
+      "watch"
+    ]
+
+  grunt.registerTask "test", (target) ->
+    grunt.task.run [
+      "clean:dev"
+      "sass:dev"
+      "autoprefixer:dev"
+      "coffee:dev"
+      "uglify:dev"
+      "run:reminder_server"
+      "connect:dev"
+      "mocha_slimer:normal"
     ]
