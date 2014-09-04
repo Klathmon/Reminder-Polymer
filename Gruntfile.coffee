@@ -20,7 +20,6 @@ module.exports = (grunt) ->
     sass:
       options:
         loadPath: [
-          "bower_components"
           APP_DIR + "/styles/partials"
           ]
         style: "compressed"
