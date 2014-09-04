@@ -1,7 +1,7 @@
 language: node_js
 
 addons:
-  firefox: "32"
+  firefox: "32.0"
 
 before_install:
   - "export DISPLAY=:99.0"
