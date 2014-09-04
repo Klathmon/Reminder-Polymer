@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>note-element</title>
+
+  <script src="../../../bower_components/platform/platform.js"></script>
+  <link rel="import" href="../../../bower_components/polymer-test-tools/tools.html">
+  <script src="../../../bower_components/polymer-test-tools/htmltest.js"></script>
+  <script src="../../../bower_components/moment/moment.js"></script>
+
+  <!-- Import the element to test -->
+  <link rel="import" href="../note-element.html">
+</head>
+<body>
+
+  <note-element id="note1" text="This is a test note!" isVisible=true></note-element>
+
+  <script>
+    document.addEventListener('polymer-ready', function() {
+
+      var note1Text = document.getElementById('note1').shadowRoot.getElementById('text');
+
+      chai.expect(note1Text.innerHTML).to.equal('This is a test note!');
+
+      done();
+    });
+  </script>
+
+</body>
+</html>

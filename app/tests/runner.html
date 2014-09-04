@@ -16,7 +16,9 @@
       mocha.setup({ui: 'tdd', slow: 1000, timeout: 5000, htmlbase: ''});
 
       htmlSuite('note-element', function() {
-        htmlTest('/elements/note-element/tests/note-element-test.html');
+        htmlTest('/elements/note-element/tests/note-renders.html');
+        htmlTest('/elements/note-element/tests/date-is-correct.html');
+        htmlTest('/elements/note-element/tests/font-size-is-correct.html');
       });
     </script>
 
