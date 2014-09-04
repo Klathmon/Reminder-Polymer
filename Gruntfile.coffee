@@ -239,6 +239,11 @@ module.exports = (grunt) ->
         options:
           xvfb: true
 
+  grunt.registerTask "cleanWorkspace", (target) ->
+    grunt.task.run [
+      "clean:dist"
+    ]
+
   grunt.registerTask "buildDev", (target) ->
     grunt.task.run [
       "clean:dev"
