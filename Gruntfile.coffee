@@ -229,6 +229,7 @@ module.exports = (grunt) ->
     mocha_slimer:
       options:
         run: true
+        timeout: 300000 # 5 minute timeout (slimerjs is a little slow)
         urls: [
           "http://localhost:<%= connect.options.port %>/tests/runner.html"
         ]
@@ -251,13 +252,13 @@ module.exports = (grunt) ->
       "autoprefixer:dev"
       "coffee:dev"
       "uglify:dev"
-      "run:reminder_server"
       "connect:dev"
     ]
 
   grunt.registerTask "serveLaunchApp", (target) ->
     grunt.task.run [
       "buildDev"
+      "run:reminder_server"
       "open:serveChrome"
       "open:serveFirefox"
       "open:serveIE"
@@ -267,6 +268,7 @@ module.exports = (grunt) ->
   grunt.registerTask "serveLaunchTest", (target) ->
     grunt.task.run [
       "buildDev"
+      "run:reminder_server"
       "open:testChrome"
       "open:testFirefox"
       "open:testIE"
@@ -276,17 +278,18 @@ module.exports = (grunt) ->
   grunt.registerTask "serve", (target) ->
     grunt.task.run [
       "buildDev"
+      "run:reminder_server"
       "watch"
     ]
 
   grunt.registerTask "test", (target) ->
     grunt.task.run [
-      "clean:dev"
-      "sass:dev"
-      "autoprefixer:dev"
-      "coffee:dev"
-      "uglify:dev"
-      "run:reminder_server"
-      "connect:dev"
+      "buildDev"
       "mocha_slimer:normal"
+    ]
+
+  grunt.registerTask "testTravis", (target) ->
+    grunt.task.run [
+      "buildDev"
+      "mocha_slimer:travis"
     ]
