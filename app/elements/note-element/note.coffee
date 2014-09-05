@@ -1,8 +1,4 @@
 Polymer 'note-element',
-  ready: ->
-    dueDateObject = moment(this.dueDate, "YYYY-MM-DDTHH:mm:ss.SSSZ") #RFC3339
-    this.dueFromNow = dueDateObject.fromNow()
-    this.dueDateParsed = dueDateObject.format('LLL')
   isVisible: false
   isVisibleChanged: (oldValue, newValue) ->
     if newValue

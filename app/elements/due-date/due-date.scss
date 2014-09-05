@@ -1,0 +1,8 @@
+@import 'colors';
+@import 'mixins';
+@import 'placeholders';
+
+:host {
+  @include reset-font;
+  @include roboto-font;
+}

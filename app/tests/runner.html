@@ -15,9 +15,13 @@
     <script>
       mocha.setup({ui: 'tdd', slow: 2000, timeout: 10000, htmlbase: ''});
 
+      htmlSuite('due-date', function() {
+        htmlTest('/elements/due-date/tests/due-date-renders.html');
+        htmlTest('/elements/due-date/tests/due-date-has-sane-default.html');
+      });
+
       htmlSuite('note-element', function() {
         htmlTest('/elements/note-element/tests/note-renders.html');
-        htmlTest('/elements/note-element/tests/date-is-correct.html');
         htmlTest('/elements/note-element/tests/font-size-is-correct.html');
       });
     </script>

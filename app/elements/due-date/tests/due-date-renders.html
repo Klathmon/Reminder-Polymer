@@ -2,28 +2,31 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>note-element</title>
+  <title>due-date</title>
 
   <script src="../../../bower_components/platform/platform.js"></script>
   <link rel="import" href="../../../bower_components/polymer-test-tools/tools.html">
   <script src="../../../bower_components/polymer-test-tools/htmltest.js"></script>
+
   <script src="../../../bower_components/moment/moment.js"></script>
 
   <!-- Import the element to test -->
-  <link rel="import" href="../note-element.html">
+  <link rel="import" href="../due-date.html">
 </head>
 <body>
 
-  <note-element id="note1" text="This is a test note!" isVisible=true dueDate="2014-09-07T13:11:16.539-04:00"></note-element>
+  <due-date></due-date>
+
+  <script>
+    document.querySelector('due-date').date = moment().add(1, 'days').format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+  </script>
 
   <script>
     document.addEventListener('polymer-ready', function() {
 
-      var note1Text = document.getElementById('note1').shadowRoot.getElementById('text');
+      var element = document.querySelector('due-date').shadowRoot.getElementById('date');
 
-      chai.expect(window.getComputedStyle(note1Text).getPropertyValue('font-size')).to
-      .be.above('20px').and
-      .be.below('75px');
+      chai.expect(element.innerHTML).to.equal('Due in a day');
 
       done();
     });

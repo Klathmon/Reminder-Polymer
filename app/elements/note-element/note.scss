@@ -10,15 +10,12 @@
   border: 1px solid #CFCFCF;
   width: 300px;
   line-height: 1;
-
-  > div {
-    padding: 12px;
-  }
 }
 
 #text {
   overflow: auto;
   max-height: 200px;
+  padding: 12px;
 }
 
 #footer {
