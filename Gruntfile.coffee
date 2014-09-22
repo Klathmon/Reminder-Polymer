@@ -33,6 +33,7 @@ module.exports = (grunt) ->
           src: [
             "styles/**/*.{scss,sass}"
             "elements/**/*.{scss,sass}"
+            "tests/**/*.{scss,sass}"
           ]
           dest: DEV_DIR
           ext: ".css"
@@ -66,6 +67,7 @@ module.exports = (grunt) ->
           src: [
             "scripts/**/*.coffee"
             "elements/**/*.coffee"
+            "tests/**/*.coffee"
           ]
           dest: DEV_DIR
           ext: ".js"
@@ -142,6 +144,7 @@ module.exports = (grunt) ->
       options:
         port: 9000
         hostname: "0.0.0.0"
+        directory: "app"
 
       dev:
         options:
@@ -151,6 +154,7 @@ module.exports = (grunt) ->
               mountFolder(connect, DEV_DIR)
               mountFolder(connect, APP_DIR)
               mountFolder(connect, "")
+              connect.directory require("path").resolve(APP_DIR)
             ]
 
     # Watch and livereload files
@@ -167,7 +171,7 @@ module.exports = (grunt) ->
         files: [
           "Gruntfile.coffee"
           APP_DIR + "/*.html"
-          APP_DIR + "/tests/*.html"
+          APP_DIR + "/tests/*.{sass,scss,css,html,coffee,js}"
           APP_DIR + "/elements/**/*.html"
           "{" + DEV_DIR + "," + APP_DIR + "}/elements/**/*.{css,sass,scss,js,coffee}"
           "{" + DEV_DIR + "," + APP_DIR + "}/styles/**/*.{css,sass,scss}"
@@ -179,6 +183,7 @@ module.exports = (grunt) ->
         files: [
           APP_DIR + "/elements/**/*.{sass,scss}"
           APP_DIR + "/styles/**/*.{sass,scss}"
+          APP_DIR + "/tests/**/*.{sass,scss}"
         ]
         tasks: [
           "sass:dev"
@@ -189,6 +194,7 @@ module.exports = (grunt) ->
         files: [
           APP_DIR + "/elements/**/*.coffee"
           APP_DIR + "/styles/**/*.coffee"
+          APP_DIR + "/tests/**/*.coffee"
         ]
         tasks: [
           "coffee:dev"
