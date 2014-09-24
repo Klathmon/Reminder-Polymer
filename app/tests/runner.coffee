@@ -2,7 +2,7 @@ class TestRunner
 
   setupTests: ()->
     mocha.setup {ui: 'tdd', slow: 2000, timeout: 10000, htmlbase: ''}
-    
+
   testElements: () ->
     thisObject = this
     Array.prototype.forEach.call thisObject.getListItemElements('/elements/'), (elementName)->
